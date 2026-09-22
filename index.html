@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+c<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -940,13 +940,9 @@
       <p>Fill out the form below and we'll follow up to confirm your date, format, and payment. Fields marked with an asterisk (*) are required.</p>
     </div>
 
-    <form id="reg-form" name="registration" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <form id="reg-form" name="registration" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
       <input type="hidden" name="form-name" value="registration">
       <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
-      <div id="reg-success" style="display:none;background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;padding:20px 24px;margin-bottom:24px;">
-        <strong style="color:var(--navy);">Thank you!</strong>
-        <p style="margin:6px 0 0 0;font-size:14px;color:var(--muted);">Your registration has been received. We'll follow up by email or phone to confirm your date, format, and payment.</p>
-      </div>
 
       <fieldset>
         <legend>Your Information</legend>
@@ -1102,26 +1098,5 @@
   </div>
 </footer>
 
-<script>
-document.getElementById('reg-form').addEventListener('submit', function(e){
-  e.preventDefault();
-  var form = e.target;
-  var data = new FormData(form);
-
-  fetch('/', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: new URLSearchParams(data).toString()
-  })
-  .then(function(){
-    form.style.display = 'none';
-    document.getElementById('reg-success').style.display = 'block';
-    document.getElementById('reg-success').scrollIntoView({behavior: 'smooth', block: 'center'});
-  })
-  .catch(function(){
-    alert('Something went wrong submitting your registration. Please email cprandmore@sheilafordcprandmorellc.com directly or call (240) 606-7636.');
-  });
-});
-</script>
 </body>
 </html>
