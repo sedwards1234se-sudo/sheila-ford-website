@@ -940,7 +940,13 @@
       <p>Fill out the form below and we'll follow up to confirm your date, format, and payment. Fields marked with an asterisk (*) are required.</p>
     </div>
 
-    <form id="reg-form">
+    <form id="reg-form" name="registration" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="registration">
+      <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+      <div id="reg-success" style="display:none;background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;padding:20px 24px;margin-bottom:24px;">
+        <strong style="color:var(--navy);">Thank you!</strong>
+        <p style="margin:6px 0 0 0;font-size:14px;color:var(--muted);">Your registration has been received. We'll follow up by email or phone to confirm your date, format, and payment.</p>
+      </div>
 
       <fieldset>
         <legend>Your Information</legend>
@@ -1054,7 +1060,7 @@
       </fieldset>
 
       <button type="submit" class="submit-btn">Submit Registration</button>
-      <p class="submit-note">Submitting opens an email to Sheila Ford CPR and More LLC with your registration details. Payment instructions will follow by email.</p>
+      <p class="submit-note">Your registration will be sent directly to Sheila Ford CPR and More LLC. Payment instructions will follow by email.</p>
     </form>
   </div>
 </section>
@@ -1099,29 +1105,22 @@
 <script>
 document.getElementById('reg-form').addEventListener('submit', function(e){
   e.preventDefault();
-  var fname = document.getElementById('fname').value;
-  var lname = document.getElementById('lname').value;
-  var email = document.getElementById('email').value;
-  var phone = document.getElementById('phone').value;
-  var classtype = document.getElementById('classtype').value;
-  var course = document.getElementById('course').value;
-  var participants = document.getElementById('participants').value;
-  var date = document.getElementById('date').value;
-  var notes = document.getElementById('notes').value;
+  var form = e.target;
+  var data = new FormData(form);
 
-  var subject = 'Course Registration: ' + course;
-  var body =
-    'Name: ' + fname + ' ' + lname + '\n' +
-    'Email: ' + email + '\n' +
-    'Phone: ' + phone + '\n' +
-    'Class Type: ' + classtype + '\n' +
-    'Course: ' + course + '\n' +
-    'Number of Participants: ' + participants + '\n' +
-    'Preferred Date: ' + date + '\n' +
-    'Notes: ' + notes;
-
-  window.location.href = 'mailto:cprandmore@sheilafordcprandmorellc.com?subject=' +
-    encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  fetch('/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams(data).toString()
+  })
+  .then(function(){
+    form.style.display = 'none';
+    document.getElementById('reg-success').style.display = 'block';
+    document.getElementById('reg-success').scrollIntoView({behavior: 'smooth', block: 'center'});
+  })
+  .catch(function(){
+    alert('Something went wrong submitting your registration. Please email cprandmore@sheilafordcprandmorellc.com directly or call (240) 606-7636.');
+  });
 });
 </script>
 </body>
